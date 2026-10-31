@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kahve">
+<meta name="theme-color" content="#3b2216">
+<title>Kahve Molası</title>
+<style>
+:root{--bg:#f7f0e8;--card:#fff;--ink:#2e1d13;--mut:#8b7566;--acc:#8a4b24;--acc2:#f0e2d3;--ok:#25805a;--bad:#d4442e}
+@media (prefers-color-scheme:dark){:root{--bg:#17110d;--card:#251b15;--ink:#f6ebe0;--mut:#b39e8e;--acc:#e0a06a;--acc2:#36281f;--ok:#58c28f}}
+[hidden]{display:none!important}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding:env(safe-area-inset-top) 0 calc(86px + env(safe-area-inset-bottom))}
+main{max-width:480px;margin:0 auto;padding:16px}
+button,input{font:inherit;color:inherit}
+header{display:flex;align-items:center;justify-content:space-between;margin:6px 0 18px}
+header h1{font-size:26px;margin:0}
+header small{color:var(--mut);display:block;font-size:14px;margin-bottom:2px}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:18px;flex:none;border:0}
+h2{font-size:15px;color:var(--mut);margin:22px 0 10px;font-weight:600}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(60,30,10,.07)}
+.people{display:flex;gap:10px}
+.p{flex:1;background:var(--card);border:2px solid transparent;border-radius:20px;padding:14px 4px;text-align:center;cursor:pointer;box-shadow:0 2px 10px rgba(60,30,10,.07)}
+.p .av{margin:0 auto 8px;width:52px;height:52px;font-size:21px}
+.p span{font-size:14px;font-weight:600}
+.p.on{border-color:var(--acc);background:var(--acc2)}
+.cnt{display:flex;align-items:center;justify-content:center;gap:28px}
+.cnt button{width:52px;height:52px;border-radius:50%;border:0;background:var(--acc2);font-size:26px;cursor:pointer;color:var(--acc)}
+.cnt b{font-size:40px;min-width:50px;text-align:center}
+.cups{text-align:center;font-size:22px;margin-top:6px;letter-spacing:4px}
+.row{padding:12px 0;border-top:1px solid var(--acc2)}
+.row:first-child{border-top:0;padding-top:0}
+.row b{font-size:14px;display:block;margin-bottom:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:9px 12px;border-radius:999px;background:var(--acc2);font-size:14px;cursor:pointer;border:0}
+.chip.on{background:var(--acc);color:#fff}
+input[type=text],input[type=password]{width:100%;padding:13px;border-radius:14px;border:0;background:var(--acc2);outline:none}
+.send{width:100%;padding:17px;border:0;border-radius:18px;background:var(--acc);color:#fff;font-weight:700;font-size:17px;margin-top:4px;cursor:pointer;box-shadow:0 6px 16px rgba(138,75,36,.3)}
+.send:disabled{opacity:.5}
+.req{display:flex;gap:12px;align-items:flex-start}
+.req .body{flex:1;min-width:0}
+.req .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.req ul{margin:6px 0;padding-left:18px;font-size:14px}
+.note{font-size:13px;color:var(--mut)}
+.pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--acc2);color:var(--acc);white-space:nowrap}
+.pill.ok{background:var(--ok);color:#fff}
+.act{margin-top:8px;width:100%;border:0;border-radius:12px;padding:12px;background:var(--acc);color:#fff;font-weight:600;cursor:pointer}
+.acts{display:flex;gap:8px;margin-top:8px}.acts .act{margin-top:0}.act.no{background:var(--acc2);color:var(--bad)}.pill.bad{background:var(--bad);color:#fff}
+.empty{text-align:center;color:var(--mut);padding:26px 10px}
+.empty i{display:block;font-size:40px;font-style:normal;margin-bottom:6px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--acc2);display:flex;padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:5}
+nav button{flex:1;border:0;background:none;padding:8px;border-radius:12px;font-size:12px;color:var(--mut);cursor:pointer;position:relative}
+nav button i{display:block;font-style:normal;font-size:22px}
+nav button.on{color:var(--acc);font-weight:700}
+.badge{position:absolute;top:2px;left:55%;background:var(--bad);color:#fff;border-radius:999px;font-size:11px;min-width:18px;padding:1px 5px}
+#toast{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 10px);max-width:456px;margin:auto;background:#3b2216;color:#fff;padding:14px 16px;border-radius:16px;transform:translateY(-160%);transition:.35s;z-index:20;font-weight:600}
+#toast.show{transform:none}
+#welcome,#gate{position:fixed;inset:0;background:var(--bg);z-index:30;display:flex;align-items:center;padding:20px}#gate{z-index:40}
+#welcome>div,#gate>div{max-width:480px;margin:auto;width:100%;text-align:center}
+#welcome h1,#gate h1{font-size:30px;margin:0 0 6px}
+#welcome p,#gate p{color:var(--mut);margin:0 0 24px}
+.step{display:flex;gap:10px;margin:10px 0;font-size:14px;line-height:1.4}
+.step b{width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+code{background:var(--acc2);padding:8px 10px;border-radius:10px;display:block;word-break:break-all;font-size:13px;margin:8px 0}
+.mini{border:0;background:var(--acc2);color:var(--acc);padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;margin-right:6px}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div><small id="hi"></small><h1>Kahve Molası ☕</h1></div>
+    <button class="av" id="meAv" title="Kişiyi değiştir"></button>
+  </header>
+
+  <section id="v1">
+    <h2>Kahveyi kim yapsın?</h2>
+    <div class="people" id="people"></div>
+    <h2>Kaç kahve?</h2>
+    <div class="card"><div class="cnt"><button id="mn">−</button><b id="n">1</b><button id="pl">+</button></div><div class="cups" id="cups"></div></div>
+    <h2>Şekerler</h2>
+    <div class="card" id="rows"></div>
+    <h2>Not</h2>
+    <input type="text" id="note" placeholder="Köpüklü olsun, yanında su…">
+    <button class="send" id="send" style="margin-top:16px">İsteği Gönder</button>
+    <h2>Gönderdiklerim</h2>
+    <div id="sent"></div>
+  </section>
+
+  <section id="v2" hidden><h2 style="margin-top:0">Sana gelen istekler</h2><div id="inbox"></div></section>
+
+  <section id="v3" hidden>
+    <h2 style="margin-top:0">Telefona bildirim kur</h2>
+    <div class="card">
+      <div class="step"><b>1</b><div>App Store veya Google Play'den ücretsiz <strong>ntfy</strong> uygulamasını indir.</div></div>
+      <div class="step"><b>2</b><div>Uygulamada <strong>+</strong> tuşuna bas, aşağıdaki adı yaz ve Subscribe de.</div></div>
+      <code id="topic"></code>
+      <button class="mini" id="copy">Kopyala</button><button class="mini" id="test">Test bildirimi gönder</button>
+      <div class="note" style="margin:10px 0">Kontrol kodu: <b id="chk"></b> (herkeste aynı olmalı, farklıysa şifre yanlış yazılmıştır)</div><button class="mini" id="chpw">Şifreyi değiştir</button>
+      <div class="step" style="margin-top:14px"><b>3</b><div>Artık biri sana kahve isteyince telefon uygulama kapalıyken bile bildirim gösterir.</div></div>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button id="t1" class="on"><i>☕</i>İste</button>
+  <button id="t2"><i>📥</i>Gelenler<span class="badge" id="bd" hidden></span></button>
+  <button id="t3"><i>🔔</i>Bildirim</button>
+</nav>
+<div id="toast"></div>
+<div id="gate" hidden><div><h1>🔒 Kahve Molası</h1><p id="gp">Grup şifresini gir</p><input type="password" id="pw" placeholder="Şifre" autocomplete="off"><div id="gerr" hidden style="color:var(--bad);font-weight:700;margin-top:12px"></div><button class="send" id="gb" style="margin-top:14px">Gir</button>
+<div id="gsetup" hidden style="margin-top:18px;text-align:left"><div class="note">Kurulum kodun:</div><code id="vcode"></code><button class="mini" id="gcopy">Kopyala</button>
+<div class="note" style="margin:12px 0">Bu kodu GitHub'da <b>index.html</b> dosyasında <b>const VERIFIER=""</b> satırında tırnakların arasına yapıştırıp kaydet. Ondan sonra yanlış şifre yazan kimse içeri giremez.</div><button class="send" id="gcont">Şimdilik devam et</button></div></div></div>
+<div id="welcome" hidden><div><h1>Kahve Molası ☕</h1><p>Sen kimsin?</p><div class="people" id="wp"></div></div></div>
+
+<script>
+// ===== AYARLAR =====
+// Grup kodu dosyada YOK: açılışta yazılan şifreden hesaplanır. Şifreyi bilmeyen kimse mesajlara ulaşamaz.
+let ROOM=null;
+async function derive(pw){const d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("kahve|"+pw.trim()));
+  return "kahve-"+[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,"0")).join("").slice(0,24);}
+const NAMES=[{n:"SS",s:"ss",c:"#c2410c"},{n:"S",s:"s",c:"#0f766e"},{n:"E",s:"e",c:"#6d28d9"}];
+const SUGAR=["Şekersiz","Az şekerli","Orta","Şekerli"];
+const SERVER="https://ntfy.sh/";
+// Şifre doğrulama kodu. Boşsa uygulama kurulum modunda açılır ve sana yapıştıracağın kodu verir.
+const VERIFIER="";
+// ===================
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const person=n=>NAMES.find(p=>p.n===n)||NAMES[0];
+let me=localStorage.getItem("kahve_me"); if(!NAMES.some(p=>p.n===me)) me=null;
+let to=null, picks=["Az şekerli"], reqs={}, stat={};
+
+const avHTML=p=>`<div class="av" style="background:${p.c}">${p.n}</div>`;
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),4000);}
+
+async function publish(topic,message,title){
+  try{
+    const body={topic,message};
+    if(title){body.title=title;body.tags=["coffee"];body.priority=4;}
+    const r=await fetch(SERVER,{method:"POST",body:JSON.stringify(body)});
+    if(!r.ok) throw 0;
+    return true;
+  }catch(e){toast("Gönderilemedi, internet bağlantını kontrol et");return false;}
+}
+const sendEvent=ev=>publish(ROOM,JSON.stringify(ev));
+const push=(name,title,msg)=>publish(ROOM+"-"+person(name).s,msg,title);
+
+function apply(ev,live){
+  if(ev.t==="req"){reqs[ev.id]=ev;
+    if(live&&ev.to===me&&ev.by!==me) toast(`☕ ${ev.from} sana ${ev.items.length} kahve istiyor`);}
+  else if(ev.t==="st"){
+    if(!stat[ev.id]||stat[ev.id].ts<=ev.ts) stat[ev.id]=ev;
+    const r=reqs[ev.id];
+    if(live&&r&&r.from===me&&ev.by!==me){
+      if(ev.s==="Kabul edildi") toast(`✅ ${r.to} isteğini kabul etti`);
+      if(ev.s==="Reddedildi") toast(`❌ ${r.to} şu an yapamıyor`);
+      if(ev.s==="Hazır") toast(`☕ Kahven hazır! (${r.to})`);}
+  }
+  render();
+}
+const status=id=>stat[id]?stat[id].s:"Bekliyor";
+
+function connect(){
+  const es=new EventSource(`${SERVER}${ROOM}/sse?since=12h`);
+  es.onmessage=e=>{try{const m=JSON.parse(e.data);if(m.event!=="message")return;
+    const ev=JSON.parse(m.message);apply(ev,Date.now()-ev.ts<30000);}catch(x){}};
+}
+
+function render(){
+  if(!me)return;
+  const p=person(me);
+  $("hi").textContent="Merhaba";
+  $("meAv").style.background=p.c;$("meAv").textContent=me;
+  // kişi seçici
+  if(!to||to===me) to=NAMES.find(x=>x.n!==me).n;
+  $("people").innerHTML=NAMES.filter(x=>x.n!==me).map(x=>`<div class="p ${x.n===to?"on":""}" data-n="${x.n}">${avHTML(x)}<span>${x.n}</span></div>`).join("");
+  $("n").textContent=picks.length;
+  $("cups").textContent="☕".repeat(picks.length);
+  $("rows").innerHTML=picks.map((s,i)=>`<div class="row">${picks.length>1?`<b>${i+1}. kahve</b>`:`<b>Şeker nasıl olsun?</b>`}<div class="chips">${SUGAR.map(x=>`<button class="chip ${x===s?"on":""}" data-i="${i}" data-s="${x}">${x}</button>`).join("")}</div></div>`).join("");
+  // gelenler
+  const all=Object.values(reqs).sort((a,b)=>b.ts-a.ts);
+  const closed=s=>s==="Teslim"||s==="Reddedildi";
+  const inc=all.filter(r=>r.to===me&&!closed(status(r.id)));
+  const bd=$("bd");bd.hidden=!inc.length;bd.textContent=inc.length;
+  $("inbox").innerHTML=inc.length?inc.map(r=>{const s=status(r.id);
+    return `<div class="card req">${avHTML(person(r.from))}<div class="body"><div class="top"><b>${esc(r.from)}</b><span class="pill ${s==="Hazır"?"ok":s==="Reddedildi"?"bad":""}">${s}</span></div>
+    <ul>${r.items.map((x,i)=>`<li>${r.items.length>1?`${i+1}. kahve: `:""}${esc(x)}</li>`).join("")}</ul>
+    ${r.note?`<div class="note">“${esc(r.note)}”</div>`:""}
+    ${s==="Bekliyor"?`<div class="acts"><button class="act no" data-id="${r.id}" data-a="no">Reddet</button><button class="act" data-id="${r.id}" data-a="yes">Kabul et</button></div>`
+    :`<button class="act" data-id="${r.id}" data-a="${s==="Hazır"?"done":"ready"}">${s==="Hazır"?"Teslim ettim":"Hazır ☕"}</button>`}</div></div>`}).join(""):'<div class="empty"><i>🫖</i>Şu an bekleyen istek yok</div>';
+  const mine=all.filter(r=>r.from===me).slice(0,6);
+  $("sent").innerHTML=mine.length?mine.map(r=>{const s=status(r.id);
+    return `<div class="card req">${avHTML(person(r.to))}<div class="body"><div class="top"><b>${esc(r.to)}</b><span class="pill ${s==="Hazır"?"ok":s==="Reddedildi"?"bad":""}">${s==="Hazır"?"Hazır ☕":s==="Reddedildi"?"Reddedildi":s}</span></div><div class="note">${r.items.map(esc).join(" · ")}</div></div></div>`}).join(""):'<div class="empty"><i>✨</i>Henüz istek göndermedin</div>';
+  $("topic").textContent=ROOM+"-"+p.s;$("chk").textContent=ROOM.slice(-4);
+}
+
+function tab(i){["v1","v2","v3"].forEach((v,k)=>{$(v).hidden=k+1!==i;$("t"+(k+1)).classList.toggle("on",k+1===i)});window.scrollTo(0,0);}
+function setMe(n){me=n;localStorage.setItem("kahve_me",n);$("welcome").hidden=true;to=null;render();}
+
+$("people").onclick=e=>{const c=e.target.closest(".p");if(c){to=c.dataset.n;render();}};
+$("wp").onclick=e=>{const c=e.target.closest(".p");if(c)setMe(c.dataset.n);};
+$("meAv").onclick=()=>{$("welcome").hidden=false;};
+$("rows").onclick=e=>{const b=e.target.closest(".chip");if(b){picks[+b.dataset.i]=b.dataset.s;render();}};
+$("mn").onclick=()=>{if(picks.length>1){picks.pop();render();}};
+$("pl").onclick=()=>{if(picks.length<6){picks.push(picks[picks.length-1]);render();}};
+["t1","t2","t3"].forEach((id,k)=>$(id).onclick=()=>tab(k+1));
+$("copy").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($("topic").textContent);toast("Kopyalandı");};
+$("test").onclick=async()=>{if(await push(me,"☕ Test","Bildirim çalışıyor!"))toast("Test gönderildi");};
+
+$("send").onclick=async()=>{
+  const b=$("send");b.disabled=true;
+  const ev={t:"req",id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),from:me,to,items:[...picks],note:$("note").value.trim(),ts:Date.now(),by:me};
+  const ok=await sendEvent(ev);
+  if(ok){
+    apply(ev,false);
+    const list=ev.items.map((x,i)=>ev.items.length>1?`${i+1}. ${x}`:x).join(", ");
+    push(to,`☕ ${me} kahve istiyor`,`${ev.items.length} kahve: ${list}${ev.note?" — "+ev.note:""}`);
+    $("note").value="";toast(`İstek ${to}'a gönderildi ✔`);
+  }
+  b.disabled=false;
+};
+$("inbox").onclick=async e=>{
+  const b=e.target.closest(".act");if(!b)return;
+  const r=reqs[b.dataset.id];if(!r)return;
+  const next={yes:"Kabul edildi",no:"Reddedildi",ready:"Hazır",done:"Teslim"}[b.dataset.a];
+  if(!next)return;
+  const ev={t:"st",id:r.id,s:next,ts:Date.now(),by:me};
+  if(await sendEvent(ev)){
+    apply(ev,false);
+    if(next==="Kabul edildi") push(r.from,"✅ İsteğin kabul edildi",`${me} kahveni yapacak`);
+    if(next==="Reddedildi") push(r.from,"❌ Şu an olmaz",`${me} şu an kahve yapamıyor`);
+    if(next==="Hazır") push(r.from,"☕ Kahven hazır!",`${me} kahveni hazırladı, gelip alabilirsin`);
+  }
+};
+
+$("wp").innerHTML=NAMES.map(x=>`<div class="p" data-n="${x.n}">${avHTML(x)}<span>${x.n}</span></div>`).join("");
+function start(){$("gate").hidden=true;if(!me)$("welcome").hidden=false;render();connect();}
+const enc=t=>new TextEncoder().encode(t);
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+async function verifier(pw){const k=await crypto.subtle.importKey("raw",enc(pw.trim()),"PBKDF2",false,["deriveBits"]);
+  return hex(await crypto.subtle.deriveBits({name:"PBKDF2",salt:enc("kahve-dogrulama-v1"),iterations:200000,hash:"SHA-256"},k,256));}
+function gerr(t){const e=$("gerr");e.textContent=t;e.hidden=false;}
+let busy=false;
+async function unlock(){
+  if(busy)return;const v=$("pw").value;$("gerr").hidden=true;
+  if(!VERIFIER){
+    if(v.trim().length<8){gerr("Şifre en az 8 karakter olmalı");return;}
+    const vf=await verifier(v);ROOM=await derive(v);
+    $("gsetup").hidden=false;$("vcode").textContent=vf;
+    $("gcont").onclick=()=>{localStorage.setItem("kahve_room",ROOM);start();};
+    $("gcopy").onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(vf);toast("Kopyalandı");};
+    return;}
+  if(!v.trim())return;
+  busy=true;$("gb").disabled=true;
+  if((await verifier(v))!==VERIFIER){gerr("Şifre yanlış");$("pw").value="";
+    setTimeout(()=>{busy=false;$("gb").disabled=false},1500);return;}
+  busy=false;$("gb").disabled=false;
+  ROOM=await derive(v);localStorage.setItem("kahve_room",ROOM);start();}
+$("gb").onclick=unlock;$("pw").onkeydown=e=>{if(e.key==="Enter")unlock();};
+$("chpw").onclick=()=>{localStorage.removeItem("kahve_room");location.reload();};
+if(!VERIFIER)$("gp").textContent="İlk kurulum: kendi grup şifreni belirle (en az 8 karakter)";
+ROOM=localStorage.getItem("kahve_room");
+if(ROOM)start();else $("gate").hidden=false;
+</script>
+</body>
+</html>
